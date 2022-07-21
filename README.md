@@ -17,7 +17,7 @@ Features: Chat lock, cooldown, bad words filter, /sudo and /sudoall commands, ch
 
 /cplus: - List of commands and subcommands - Permission: cplus.view
 
-    reload - reloads the configuration file - Permission: cplus.reload
+/cplus reload - Reloads the configuration file - Permission: cplus.reload
     
 /lockchat - Lock the chat - Permission: cplus.lockchat
 
