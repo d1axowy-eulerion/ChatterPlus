@@ -1,7 +1,7 @@
 # ChatterPlus
 A plugin for chat managing with a lot of great features. Will soon release and work correctly!
 
-# Version: 0.0.0.0.0.1 (doesnt exist yet)
+# Version: 0.2
 
 Features: Chat lock, cooldown, bad words filter, /sudo and /sudoall commands, chat formatting (beta), antylink (beta)
 
@@ -13,4 +13,14 @@ Features: Chat lock, cooldown, bad words filter, /sudo and /sudoall commands, ch
 
 # Commands and Permissions
 
-Soon...
+/chatclear - Clears the chat - Permission: cplus.chatclear
+/cplus: - List of commands and subcommands - Permission: cplus.view
+    reload - reloads the configuration file - Permission: cplus.reload
+/lockchat - Lock the chat - Permission: cplus.lockchat
+/unlockchat - Unlock the chat - Permission: cplus.unlockchat
+/sudo - Forces someone else (first argument) to say or execute a command (second+ argument), to execute a command you need to add a '/' - Permission: cplus.sudo
+/sudoall - Forces the whole server to say or execute a command (first+ argument), to execute a command you need to add a '/' - Permission: cplus.sudoall
+
+# Known Incompatibilites
+
+DiscordSRV - logging channels on Discord may not show messages correctly if chat formatting is on
