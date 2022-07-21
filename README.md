@@ -1,4 +1,4 @@
-# ChatterPlus
+# ChatterPlus | Manage your chat easily with this chat manager! [1.8 - 1.19]
 A plugin for chat managing with a lot of great features. Will soon release and work correctly!
 
 # Version: 0.2
