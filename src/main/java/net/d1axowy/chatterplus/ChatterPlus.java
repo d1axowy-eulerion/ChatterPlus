@@ -23,7 +23,10 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
     public void onEnable() {
         // Plugin startup logic
         saveDefaultConfig();
-        System.out.println("ChatterPlus starting with " + Bukkit.getBukkitVersion() + " and " + Bukkit.getVersion());
+        getLogger().info("ChatterPlus starting with " + Bukkit.getBukkitVersion() + " and " + Bukkit.getVersion());
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI")==null){
+            getLogger().warning("PlaceholderAPI not detected, this might end up with errors!");
+        }
         getServer().getPluginManager().registerEvents(this, this);
 
         reload();
@@ -233,28 +236,31 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
     public void ChatFormatting(AsyncPlayerChatEvent e){
         String msg = getConfig().getString("chat-format");
         Player p = e.getPlayer();
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if(getConfig().getBoolean("enable-chat-formatting")){
+            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 
-            e.setCancelled(true);
-
-
-
-
-            msg = PlaceholderAPI.setPlaceholders(e.getPlayer(), msg);
+                e.setCancelled(true);
 
 
-            for(Player all : Bukkit.getOnlinePlayers()){
-                all.sendMessage(Utils.color(msg).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", e.getMessage()));
-            }
-
-        }else{
-            e.setCancelled(true);
 
 
-            for(Player all : Bukkit.getOnlinePlayers()){
-                all.sendMessage(Utils.color(msg).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", e.getMessage()));
+                msg = PlaceholderAPI.setPlaceholders(e.getPlayer(), msg);
+
+
+                for(Player all : Bukkit.getOnlinePlayers()){
+                    all.sendMessage(Utils.color(msg).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", e.getMessage()));
+                }
+
+            }else{
+                e.setCancelled(true);
+
+
+                for(Player all : Bukkit.getOnlinePlayers()){
+                    all.sendMessage(Utils.color(msg).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", e.getMessage()));
+                }
             }
         }
+
 
     }
 

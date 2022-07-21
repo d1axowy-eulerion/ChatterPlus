@@ -45,4 +45,5 @@ antylink-cancel-send-if-link-detected: false
 #Chat formatting
 #Built-in placeholders: {PLAYER}, {MSG}
 #You can use PlaceHolderAPI and Vault to get ranks/prefixes, etc.
+enable-chat-formatting: false
 chat-format: "&7{PLAYER}&8: &f{MSG}"

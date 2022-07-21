@@ -1,7 +1,6 @@
 name: ChatterPlus
 version: '${project.version}'
 main: net.d1axowy.chatterplus.ChatterPlus
-api-version: 1.19
 authors: [ d1axowy ]
 description: Manage chat easily!
 softdepend:
