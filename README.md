@@ -13,13 +13,20 @@ Features: Chat lock, cooldown, bad words filter, /sudo and /sudoall commands, ch
 
 # Commands and Permissions
 
-/chatclear - Clears the chat - Permission: cplus.chatclear\n
-/cplus: - List of commands and subcommands - Permission: cplus.view\n
-    reload - reloads the configuration file - Permission: cplus.reload\n
-/lockchat - Lock the chat - Permission: cplus.lockchat\n
-/unlockchat - Unlock the chat - Permission: cplus.unlockchat\n
-/sudo - Forces someone else (first argument) to say or execute a command (second+ argument), to execute a command you need to add a '/' - Permission: cplus.sudo\n
-/sudoall - Forces the whole server to say or execute a command (first+ argument), to execute a command you need to add a '/' - Permission: cplus.sudoall\n
+/chatclear - Clears the chat - Permission: cplus.chatclear
+
+/cplus: - List of commands and subcommands - Permission: cplus.view
+
+    reload - reloads the configuration file - Permission: cplus.reload
+    
+/lockchat - Lock the chat - Permission: cplus.lockchat
+
+
+/unlockchat - Unlock the chat - Permission: cplus.unlockchat
+
+/sudo - Forces someone else (first argument) to say or execute a command (second+ argument), to execute a command you need to add a '/' - Permission: cplus.sudo
+
+/sudoall - Forces the whole server to say or execute a command (first+ argument), to execute a command you need to add a '/' - Permission: cplus.sudoall
 
 # Known Incompatibilites
 
