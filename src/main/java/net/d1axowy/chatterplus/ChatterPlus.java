@@ -1,6 +1,4 @@
 package net.d1axowy.chatterplus;
-
-import com.avaje.ebeaninternal.server.jmx.MAdminAutofetch;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -233,17 +231,29 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
 
     @EventHandler
     public void ChatFormatting(AsyncPlayerChatEvent e){
-        String msg = e.getMessage();
+        String msg = getConfig().getString("chat-format");
         Player p = e.getPlayer();
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            msg = e.getMessage().replace("%", "^");
+
+            e.setCancelled(true);
+
+
+
 
             msg = PlaceholderAPI.setPlaceholders(e.getPlayer(), msg);
 
 
-            e.setFormat(ChatColor.translateAlternateColorCodes('&', getConfig().getString("chat-format")).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", msg));
+            for(Player all : Bukkit.getOnlinePlayers()){
+                all.sendMessage(Utils.color(msg).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", e.getMessage()));
+            }
+
         }else{
-            e.setFormat(ChatColor.translateAlternateColorCodes('&', getConfig().getString("chat-format")).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", msg));
+            e.setCancelled(true);
+
+
+            for(Player all : Bukkit.getOnlinePlayers()){
+                all.sendMessage(Utils.color(msg).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", e.getMessage()));
+            }
         }
 
     }
