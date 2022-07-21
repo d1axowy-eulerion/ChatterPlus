@@ -1,0 +1,48 @@
+#messages - some support %player%, also support color codes (&a, &1, etc)
+messages:
+  #appears when someone clears the chat
+  chat-cleared-global: "The chat has been cleared by %player%"
+  #appears when someone locks the chat while it is already locked
+  chat-locked: "The chat is already locked!"
+  #appears when someone unlocks the chat while it is already unlocked
+  chat-notlocked: "The chat is already unlocked!"
+  #appears when someone locks the chat
+  chat-lock-success-all: "Chat locked by %player%!"
+  #appears when someone unlocks the chat
+  chat-unlock-success-all: "Chat unlocked by %player%!"
+  #appears when someone sends a message during chat-lock
+  message-during-lock: "You cannot send this message because the chat is locked!"
+  #appears when a message someone sent contains a badword from the "badwords" list below
+  contains-badword: "This message contains a bad word set up by the administrator and you cannot send this!"
+  #appears when someone sends a message while they are on cooldown, %cooldown_time% - time remaining
+  chat-cooldown-reached: "Please wait 3 seconds before typing the next message!"
+  #appears when someone uses a command that he doesnt have permissions to
+  noperms: "You don't have enough permissions!"
+  #appears when someone uses /sudo with wrong arguments
+  sudo-less-args: "There are not enough arguments! Use /sudo <player> <message/command>"
+  #appears when someone tries to use /sudo on an offline player
+  sudo-player-offline: "This player is offline"
+  #if antylink-cancel-send-if-link-detected is true and someone sends a link, this will appear to them
+  contains-link: "This message contains a link and has not been sent"
+
+
+#list of words that are not allowed
+badwords:
+  - word1
+  - word2
+  - word3
+#chat cooldown in milliseconds
+chat-cooldown: 3000
+
+
+#antylink is beta
+#antylink options (PLEASE CHOOSE ONLY ONE OPTION, OTHERWISE IT MAY MEET ERRORS)
+#remove dots from the player's message in the link
+antylink-remove-dots: false
+#remove the player's message if it contains a link, and send him the "contains-link" message from config
+antylink-cancel-send-if-link-detected: false
+
+#Chat formatting
+#Built-in placeholders: {PLAYER}, {MSG}
+#You can use PlaceHolderAPI and Vault to get ranks/prefixes, etc.
+chat-format: "&7{PLAYER}&8: &f{MSG}"

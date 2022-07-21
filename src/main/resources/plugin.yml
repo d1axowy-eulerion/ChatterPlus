@@ -1,0 +1,25 @@
+name: ChatterPlus
+version: '${project.version}'
+main: net.d1axowy.chatterplus.ChatterPlus
+api-version: 1.19
+authors: [ d1axowy ]
+description: Manage chat easily!
+softdepend:
+  - PlaceholderAPI
+loadbefore:
+  - Essentials
+  - EssentialsX
+  - LPC
+commands:
+  chatclear:
+    description: Clears the chat
+  cplus:
+    description: Reloads the config!
+  lockchat:
+    description: Lock the chat!
+  unlockchat:
+    description: Unlock the chat!
+  sudoall:
+    description: Make everyone say something!
+  sudo:
+    description: Make someone say something!
