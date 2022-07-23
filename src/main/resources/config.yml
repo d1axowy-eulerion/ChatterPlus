@@ -1,4 +1,4 @@
-#messages - some support %player%, also support color codes (&a, &1, etc)
+#messages - some support %player%, but every support color codes (&a, &1, etc)
 messages:
   #appears when someone clears the chat
   chat-cleared-global: "The chat has been cleared by %player%"
@@ -14,8 +14,8 @@ messages:
   message-during-lock: "You cannot send this message because the chat is locked!"
   #appears when a message someone sent contains a badword from the "badwords" list below
   contains-badword: "This message contains a bad word set up by the administrator and you cannot send this!"
-  #appears when someone sends a message while they are on cooldown, %cooldown_time% - time remaining
-  chat-cooldown-reached: "Please wait 3 seconds before typing the next message!"
+  #appears when someone sends a message while they are on cooldown
+  chat-cooldown-reached: "Please wait %seconds% seconds before typing the next message!"
   #appears when someone uses a command that he doesnt have permissions to
   noperms: "You don't have enough permissions!"
   #appears when someone uses /sudo with wrong arguments
@@ -43,7 +43,7 @@ antylink-remove-dots: false
 antylink-cancel-send-if-link-detected: false
 
 #Chat formatting
-#Built-in placeholders: {PLAYER}, {MSG}
+#Built-in placeholders: {player}, {message}
 #You can use PlaceHolderAPI and Vault to get ranks/prefixes, etc.
 enable-chat-formatting: false
-chat-format: "&7{PLAYER}&8: &f{MSG}"
+chat-format: "&7%player%&8: &f%message%"

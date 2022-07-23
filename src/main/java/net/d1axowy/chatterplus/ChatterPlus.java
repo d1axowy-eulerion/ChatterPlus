@@ -1,20 +1,27 @@
 package net.d1axowy.chatterplus;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.cacheddata.CachedMetaData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import net.luckperms.api.LuckPerms;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Listener {
+
 
 
     boolean isChatLocked = false;
@@ -51,19 +58,33 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
                     for (Player people : Bukkit.getOnlinePlayers()) {
                         people.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.chat-cleared-global").replace("%player%", p.getDisplayName())));
                     }
-                } else {
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.no-permission").replace("%player%", p.getDisplayName())));
+                }else{
+                    p.sendMessage(Utils.color(getConfig().getString("messages.noperms")));
                 }
             } else {
                 System.out.println("Sorry, but you can only execute /chatclear as a player.");
             }
         } else if (command.getName().equalsIgnoreCase("cplus")) {
             Player p = (Player) sender;
-            if (p.hasPermission("cplus.reload")) {
 
-                reload();
+            if(args.length == 0){
+                if(p.hasPermission("cplus.view")){
+                    p.sendMessage(ChatColor.DARK_GRAY + "- " + ChatColor.RED + "/cplus" + ChatColor.GRAY + " - Shows the list of commands");
+                    p.sendMessage(ChatColor.DARK_GRAY + "- " + ChatColor.RED + "/cplus reload" + ChatColor.GRAY + " - Reloads the config");
+                }else{
+                    p.sendMessage(Utils.color(getConfig().getString("messages.noperms")));
+                }
 
-                p.sendMessage(ChatColor.GREEN + "Reloaded the config of ChatterPlus");
+            }else if(args[0].equalsIgnoreCase("reload")){
+                if(p.hasPermission("cplus.reload")){
+                    reload();
+                    p.sendMessage(ChatColor.GREEN + "Reloaded the config of ChatterPlus");
+                }else{
+                    p.sendMessage(Utils.color(getConfig().getString("messages.noperms")));
+                }
+
+            }else{
+                p.sendMessage(ChatColor.RED + "Please enter a valid command!");
             }
 
         } else if (command.getName().equalsIgnoreCase("lockchat")) {
@@ -81,6 +102,8 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
                 }
 
 
+            }else{
+                p.sendMessage(Utils.color(getConfig().getString("messages.noperms")));
             }
 
         } else if(command.getName().equalsIgnoreCase("unlockchat")){
@@ -94,11 +117,12 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
 
 
                 }else if(isChatLocked == true){
-                    isChatLocked = false;
                     for(Player all : Bukkit.getOnlinePlayers()){
-                        all.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.chat-lock-success-all")).replace("%player", p.getDisplayName()));
+                        all.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.chat-notlocked")).replace("%player", p.getDisplayName()));
                     }
                 }
+            }else{
+                p.sendMessage(Utils.color(getConfig().getString("messages.noperms")));
             }
 
         }else if(command.getName().equalsIgnoreCase("sudoall")){
@@ -151,8 +175,8 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
         return true;
         }
 
-    @EventHandler
-    public void onMsgSend(AsyncPlayerChatEvent e){
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void LockChecker(AsyncPlayerChatEvent e){
         if(isChatLocked == true){
             Player p = e.getPlayer();
 
@@ -168,18 +192,21 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
     }
     List<String> badwords = null;
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void BadWordDetect(AsyncPlayerChatEvent e){
-
         Player p = e.getPlayer();
+        if(p.hasPermission("cplus.anti-badword-bypass")){
+            for(String s : badwords){
+                if(e.getMessage().contains(s)){
+                    e.setCancelled(true);
 
-        for(String s : badwords){
-            if(e.getMessage().contains(s)){
-                e.setCancelled(true);
-
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.contains-badword")));
+                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.contains-badword")));
+                }
             }
+        }else{
+
         }
+
 
     }
 
@@ -188,31 +215,39 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
         badwords = getConfig().getStringList("badwords");
     }
 
-    HashMap<Player, Long> spam = new HashMap<Player, Long>();
 
-    @EventHandler
-    public void ChatCooldown(AsyncPlayerChatEvent e) {
+    private HashMap<UUID, Long> cooldown = new HashMap<>();
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent e){
         Player p = e.getPlayer();
-
-        if (!p.hasPermission("cplus.bypasscooldown")) {
-            if (spam.containsKey(p)) {
-                if (spam.get(p) > System.currentTimeMillis()) {
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.chat-cooldown-reached")).replace("%cooldown_time%", "hi"));
-
-                    e.setCancelled(true);
-
-                } else {
-                    spam.put(p, System.currentTimeMillis() + getConfig().getInt("chat-cooldown"));
-                }
-            } else {
-
-                spam.put(p, System.currentTimeMillis() + getConfig().getInt("chat-cooldown"));
+        if(!p.hasPermission("cplus.chat-cooldown-bypass")){
+            if (!cooldown.containsKey(p.getUniqueId())) {
+                cooldown.put(p.getUniqueId(), System.currentTimeMillis());
+                return;
             }
+
+            long timeElapsed = System.currentTimeMillis() - cooldown.get(p.getUniqueId());
+
+            if (timeElapsed >= getConfig().getInt("chat-cooldown")) {
+                cooldown.put(p.getUniqueId(), System.currentTimeMillis());
+                return;
+            }
+
+            long remaining = getConfig().getInt("chat-cooldown");
+
+
+            e.setCancelled(true);
+            remaining = remaining - timeElapsed;
+            p.sendMessage(Utils.color(getConfig().getString("messages.chat-cooldown-reached").replace("%seconds%", Integer.toString(Math.round(remaining/1000)))));
+        }else{
+
         }
+
     }
 
 
-    @EventHandler
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public void Antylink(AsyncPlayerChatEvent e){
         String message = e.getMessage();
         Player p = e.getPlayer();
@@ -231,38 +266,25 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
 
         }
     }
-
     @EventHandler
     public void ChatFormatting(AsyncPlayerChatEvent e){
-        String msg = getConfig().getString("chat-format");
-        Player p = e.getPlayer();
         if(getConfig().getBoolean("enable-chat-formatting")){
+            String msg = e.getMessage();
+            String format = getConfig().getString("chat-format");
+            Player p = e.getPlayer();
+            if(msg.contains("%")){
+                msg = msg.replace("%", "%%");
+            }
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-
-                e.setCancelled(true);
-
-
-
-
-                msg = PlaceholderAPI.setPlaceholders(e.getPlayer(), msg);
-
-
-                for(Player all : Bukkit.getOnlinePlayers()){
-                    all.sendMessage(Utils.color(msg).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", e.getMessage()));
-                }
-
+                format = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
+                e.setMessage(msg);
+                e.setFormat(ChatColor.translateAlternateColorCodes('&', format).replace("%player%", p.getDisplayName()).replace("%message%", msg));
             }else{
-                e.setCancelled(true);
-
-
-                for(Player all : Bukkit.getOnlinePlayers()){
-                    all.sendMessage(Utils.color(msg).replace("{PLAYER}", p.getDisplayName()).replace("{MSG}", e.getMessage()));
-                }
+                e.setFormat(ChatColor.translateAlternateColorCodes('&', format).replace("%player%", p.getDisplayName()).replace("%message%", msg).replace("%", "%%"));
             }
         }
 
 
     }
-
 
 }
