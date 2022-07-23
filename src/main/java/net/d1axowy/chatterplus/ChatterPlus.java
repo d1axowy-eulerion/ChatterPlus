@@ -13,8 +13,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.luckperms.api.LuckPerms;
+
+import javax.print.DocFlavor;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +52,30 @@ public final class ChatterPlus extends JavaPlugin implements CommandExecutor, Li
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        getLogger().info("ChatterPlus has ended it's job with "+Bukkit.getBukkitVersion() + " and " + Bukkit.getVersion());
     }
+
+
+    @EventHandler
+    public void UpdateChecker(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        try {
+            if (p.hasPermission("cplus.check-updates{")) {
+                HttpURLConnection con = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=103626").openConnection();
+                con.setRequestMethod("GET");
+                String onlineVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+                boolean availableUpdate = !onlineVersion.equals(getDescription().getVersion());
+
+                if(availableUpdate){
+                    p.sendMessage(ChatColor.GREEN + "New version of ChatterPlus available: " + onlineVersion);
+                }
+            }
+            } catch(MalformedURLException exception){
+
+            } catch(IOException exception){
+
+            }
+        }
 
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
