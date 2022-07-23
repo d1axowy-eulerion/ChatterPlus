@@ -15,7 +15,7 @@ Features: Chat lock, cooldown, bad words filter, /sudo and /sudoall commands, ch
 
 /chatclear - Clears the chat - Permission: cplus.chatclear
 
-/cplus: - List of commands and subcommands - Permission: cplus.view
+/cplus - List of commands and subcommands - Permission: cplus.view
 
 /cplus reload - Reloads the configuration file - Permission: cplus.reload
     
@@ -27,7 +27,3 @@ Features: Chat lock, cooldown, bad words filter, /sudo and /sudoall commands, ch
 /sudo - Forces someone else (first argument) to say or execute a command (second+ argument), to execute a command you need to add a '/' - Permission: cplus.sudo
 
 /sudoall - Forces the whole server to say or execute a command (first+ argument), to execute a command you need to add a '/' - Permission: cplus.sudoall
-
-# Known Incompatibilites
-
-DiscordSRV - logging channels on Discord may not show messages correctly if chat formatting is on
