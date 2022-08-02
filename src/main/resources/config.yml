@@ -24,7 +24,13 @@ messages:
   sudo-player-offline: "This player is offline"
   #if antylink-cancel-send-if-link-detected is true and someone sends a link, this will appear to them
   contains-link: "This message contains a link and has not been sent"
+  #appears when someone uses /broadcast with wrong arguments
+  broadcast-less-args: "Wrong amount of arguments! use /broadcast <message>"
 
+
+#broadcast settings
+#the way how broadcasting will look like (use %broadcast_msg% to get the broadcast message)
+broadcast-format: "&b&lMy&e&lServer&f&l.EU &8| &7%broadcast_msg%"
 
 #list of words that are not allowed
 badwords:

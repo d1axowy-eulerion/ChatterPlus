@@ -22,3 +22,6 @@ commands:
     description: Make everyone say something!
   sudo:
     description: Make someone say something!
+  broadcast:
+    aliases: bc
+    description: Broadcast a message to the server!
